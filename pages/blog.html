@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Sté Rouaa Ceramic</title>
+    <meta name="description" content="Découvrez nos articles et conseils sur les carreaux céramiques, les tendances de décoration et les astuces d'aménagement.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .blog-container {
+            margin-top: 40px;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .blog-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .blog-image {
+            height: 220px;
+            overflow: hidden;
+        }
+        
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .blog-card:hover .blog-image img {
+            transform: scale(1.05);
+        }
+        
+        .blog-content {
+            padding: 25px;
+        }
+        
+        .blog-date {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .blog-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .blog-excerpt {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .blog-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .blog-category {
+            background-color: #f2f2f2;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .blog-filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .blog-search {
+            position: relative;
+            max-width: 300px;
+            width: 100%;
+        }
+        
+        .blog-search input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 14px;
+        }
+        
+        .blog-search button {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .blog-categories-filter {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .blog-category-filter {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: #f2f2f2;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .blog-category-filter:hover,
+        .blog-category-filter.active {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            gap: 10px;
+        }
+        
+        .pagination a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f2f2f2;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination a:hover,
+        .pagination a.active {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .placeholder-image {
+            background-color: #eee;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <h1>Sté Rouaa Ceramic</h1>
+                    </a>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation toggle button (hamburger) -->
+    <div class="nav-toggle">
+        <span></span>
+    </div>
+    
+    <!-- Navigation overlay -->
+    <div class="nav-overlay"></div>
+    
+    <!-- Main navigation menu -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="inspirations.html">Inspirations</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="visite360.html">Visite 360</a></li>
+            <li><a href="blog.html" class="active">Blog</a></li>
+            <li><a href="produits.html">Tous les produits</a></li>
+            <li><a href="simulateur.html">Simulateur</a></li>
+            <li class="divider"></li>
+            <li><a href="apropos.html">A propos de nous</a></li>
+            <li><a href="points-de-vente.html">Points de vente</a></li>
+            <li><a href="favoris.html">Mes favoris</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="en/index.html">English</a></li>
+        </ul>
+        <div class="nav-social">
+            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="container">
+            <h1 class="page-title">Notre Blog</h1>
+            <p class="page-subtitle">Découvrez nos articles et conseils sur les carreaux céramiques, les tendances de décoration et les astuces d'aménagement.</p>
+            
+            <div class="blog-container">
+                <div class="blog-filters">
+                    <div class="blog-search">
+                        <input type="text" placeholder="Rechercher un article...">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                    
+                    <div class="blog-categories-filter">
+                        <div class="blog-category-filter active" data-category="all">Tous</div>
+                        <div class="blog-category-filter" data-category="conseils">Conseils</div>
+                        <div class="blog-category-filter" data-category="tendances">Tendances</div>
+                        <div class="blog-category-filter" data-category="projets">Projets</div>
+                        <div class="blog-category-filter" data-category="produits">Produits</div>
+                    </div>
+                </div>
+                
+                <div class="blog-grid">
+                    <!-- Blog Article 1 -->
+                    <div class="blog-card" data-category="conseils">
+                        <div class="blog-image">
+                            <div class="placeholder-image">Image de l'article (Cuisine)</div>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-date">01 Juin 2025</div>
+                            <h3 class="blog-title">Comment choisir son carrelage de cuisine ?</h3>
+                            <p class="blog-excerpt">Découvrez nos conseils pour choisir le carrelage parfait pour votre cuisine, en fonction de vos besoins et de votre style de décoration.</p>
+                            <a href="blog-cuisine.html" class="btn">Lire plus</a>
+                            <div class="blog-categories">
+                                <span class="blog-category">Conseils</span>
+                                <span class="blog-category">Cuisine</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Article 2 -->
+                    <div class="blog-card" data-category="conseils">
+                        <div class="blog-image">
+                            <div class="placeholder-image">Image de l'article (Salle de bain)</div>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-date">25 Mai 2025</div>
+                            <h3 class="blog-title">Comment choisir son carrelage de salle de bain ?</h3>
+                            <p class="blog-excerpt">Nos experts vous guident dans le choix du carrelage idéal pour votre salle de bain, alliant esthétique et fonctionnalité.</p>
+                            <a href="blog-salle-de-bain.html" class="btn">Lire plus</a>
+                            <div class="blog-categories">
+                                <span class="blog-category">Conseils</span>
+                                <span class="blog-category">Salle de bain</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Article 3 -->
+                    <div class="blog-card" data-category="tendances">
+                        <div class="blog-image">
+                            <div class="placeholder-image">Image de l'article (Tendances)</div>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-date">15 Mai 2025</div>
+                            <h3 class="blog-title">Les tendances carrelage pour 2025</h3>
+                            <p class="blog-excerpt">Découvrez les dernières tendances en matière de carrelage pour cette année : couleurs, motifs, formats et textures à la mode.</p>
+                            <a href="#" class="btn">Lire plus</a>
+                            <div class="blog-categories">
+                                <span class="blog-category">Tendances</span>
+                                <span class="blog-category">Décoration</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Article 4 -->
+                    <div class="blog-card" data-category="projets">
+                        <div class="blog-image">
+                            <div class="placeholder-image">Image de l'article (Projet)</div>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-date">05 Mai 2025</div>
+                            <h3 class="blog-title">Rénovation d'un salon avec carrelage effet bois</h3>
+                            <p class="blog-excerpt">Découvrez comment ce projet de rénovation a transformé un salon grâce à notre carrelage effet bois, alliant chaleur et praticité.</p>
+                            <a href="#" class="btn">Lire plus</a>
+                            <div class="blog-categories">
+                                <span class="blog-category">Projets</span>
+                                <span class="blog-category">Salon</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Article 5 -->
+                    <div class="blog-card" data-category="produits">
+                        <div class="blog-image">
+                            <div class="placeholder-image">Image de l'article (Produit)</div>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-date">28 Avril 2025</div>
+                            <h3 class="blog-title">Carrelage grand format : avantages et inconvénients</h3>
+                            <p class="blog-excerpt">Tout ce que vous devez savoir sur les carreaux de grand format : leurs avantages, leurs inconvénients et comment les installer correctement.</p>
+                            <a href="#" class="btn">Lire plus</a>
+                            <div class="blog-categories">
+                                <span class="blog-category">Produits</span>
+                                <span class="blog-category">Conseils</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Blog Article 6 -->
+                    <div class="blog-card" data-category="conseils">
+                        <div class="blog-image">
+                            <div class="placeholder-image">Image de l'article (Entretien)</div>
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-date">15 Avril 2025</div>
+                            <h3 class="blog-title">Comment entretenir son carrelage pour qu'il dure plus longtemps</h3>
+                            <p class="blog-excerpt">Nos conseils d'experts pour l'entretien de vos carreaux céramiques afin de préserver leur beauté et leur durabilité au fil des années.</p>
+                            <a href="#" class="btn">Lire plus</a>
+                            <div class="blog-categories">
+                                <span class="blog-category">Conseils</span>
+                                <span class="blog-category">Entretien</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pagination">
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#"><i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Sté Rouaa Ceramic</h2>
+                    <p>Votre partenaire en carreaux céramiques de qualité</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Produits</h3>
+                        <ul>
+                            <li><a href="produits.html?effet=pierre">Effet Pierre</a></li>
+                            <li><a href="produits.html?effet=marbre">Effet Marbre</a></li>
+                            <li><a href="produits.html?effet=bois">Effet Bois</a></li>
+                            <li><a href="produits.html?effet=ciment">Effet Ciment</a></li>
+                            <li><a href="produits.html?effet=metal">Effet Métal</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>À propos</h3>
+                        <ul>
+                            <li><a href="apropos.html">Qui sommes-nous</a></li>
+                            <li><a href="points-de-vente.html">Points de vente</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Suivez-nous</h3>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Sté Rouaa Ceramic. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category filtering
+            const categoryFilters = document.querySelectorAll('.blog-category-filter');
+            const blogCards = document.querySelectorAll('.blog-card');
+            
+            categoryFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    // Remove active class from all filters
+                    categoryFilters.forEach(f => f.classList.remove('active'));
+                    
+                    // Add active class to clicked filter
+                    this.classList.add('active');
+                    
+                    const category = this.getAttribute('data-category');
+                    
+                    // Show/hide blog cards based on category
+                    blogCards.forEach(card => {
+                        if (category === 'all' || card.getAttribute('data-category') === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.querySelector('.blog-search input');
+            
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    
+                    blogCards.forEach(card => {
+                        const title = card.querySelector('.blog-title').textContent.toLowerCase();
+                        const excerpt = card.querySelector('.blog-excerpt').textContent.toLowerCase();
+                        
+                        if (title.includes(searchTerm) || excerpt.includes(searchTerm)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

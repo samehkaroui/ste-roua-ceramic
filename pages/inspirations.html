@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspirations - Sté Rouaa Ceramic</title>
+    <meta name="description" content="Découvrez nos inspirations et idées d'aménagement avec les carreaux céramiques Sté Rouaa Ceramic pour votre maison ou espace commercial.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .inspirations-container {
+            margin-top: 40px;
+        }
+        
+        .inspirations-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .filter-button {
+            padding: 10px 20px;
+            background-color: #f2f2f2;
+            border: none;
+            border-radius: 30px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-button:hover,
+        .filter-button.active {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .inspirations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .inspiration-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            aspect-ratio: 1;
+        }
+        
+        .inspiration-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .inspiration-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .inspiration-item:hover .inspiration-image {
+            transform: scale(1.05);
+        }
+        
+        .inspiration-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            padding: 20px;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .inspiration-item:hover .inspiration-overlay {
+            transform: translateY(0);
+        }
+        
+        .inspiration-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .inspiration-description {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .inspiration-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .inspiration-tag {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .inspiration-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 50px 20px;
+        }
+        
+        .modal-content {
+            background-color: white;
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .modal-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+        
+        .modal-details {
+            padding: 30px;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .modal-description {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            color: #444;
+        }
+        
+        .modal-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #c8a45d;
+        }
+        
+        .related-products {
+            margin-top: 30px;
+        }
+        
+        .related-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #c8a45d;
+        }
+        
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .related-product {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .related-product img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .related-product-name {
+            padding: 10px;
+            font-size: 14px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        
+        .placeholder-image {
+            background-color: #eee;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .load-more {
+            display: block;
+            margin: 40px auto 0;
+            padding: 12px 30px;
+            background-color: #c8a45d;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .load-more:hover {
+            background-color: #b08d40;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <h1>Sté Rouaa Ceramic</h1>
+                    </a>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation toggle button (hamburger) -->
+    <div class="nav-toggle">
+        <span></span>
+    </div>
+    
+    <!-- Navigation overlay -->
+    <div class="nav-overlay"></div>
+    
+    <!-- Main navigation menu -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="inspirations.html" class="active">Inspirations</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="visite360.html">Visite 360</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="produits.html">Tous les produits</a></li>
+            <li><a href="simulateur.html">Simulateur</a></li>
+            <li class="divider"></li>
+            <li><a href="apropos.html">A propos de nous</a></li>
+            <li><a href="points-de-vente.html">Points de vente</a></li>
+            <li><a href="favoris.html">Mes favoris</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="en/index.html">English</a></li>
+        </ul>
+        <div class="nav-social">
+            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="container">
+            <h1 class="page-title">Inspirations</h1>
+            <p class="page-subtitle">Découvrez nos idées d'aménagement et laissez-vous inspirer pour votre prochain projet.</p>
+            
+            <div class="inspirations-container">
+                <div class="inspirations-filters">
+                    <!-- Filter buttons will be populated by JS -->
+                </div>
+                
+                <div class="inspirations-grid">
+                    <!-- Inspiration items will be populated by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modal for inspiration details -->
+    <div class="inspiration-modal" id="inspirationModal">
+        <div class="modal-content">
+            <div class="modal-close"><i class="fas fa-times"></i></div>
+            <div class="placeholder-image modal-image">Image grande taille</div>
+            <div class="modal-details">
+                <h2 class="modal-title">Titre de l'inspiration</h2>
+                <p class="modal-description">Description détaillée de l'inspiration. Cette section contiendra une description complète du projet, avec des détails sur les matériaux utilisés, les dimensions, et les particularités du design.</p>
+                
+                <div class="modal-info">
+                    <div class="info-item">
+                        <div class="info-title">Espace</div>
+                        <div class="info-content">Type d'espace</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-title">Style</div>
+                        <div class="info-content">Style de décoration</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-title">Produits</div>
+                        <div class="info-content">Types de carrelage</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-title">Format</div>
+                        <div class="info-content">Dimensions des carreaux</div>
+                    </div>
+                </div>
+                
+                <div class="related-products">
+                    <h3 class="related-title">Produits utilisés dans ce projet</h3>
+                    <div class="related-grid">
+                        <div class="related-product">
+                            <div class="placeholder-image">Image produit</div>
+                            <div class="related-product-name">Nom du produit</div>
+                        </div>
+                        <div class="related-product">
+                            <div class="placeholder-image">Image produit</div>
+                            <div class="related-product-name">Nom du produit</div>
+                        </div>
+                        <div class="related-product">
+                            <div class="placeholder-image">Image produit</div>
+                            <div class="related-product-name">Nom du produit</div>
+                        </div>
+                        <div class="related-product">
+                            <div class="placeholder-image">Image produit</div>
+                            <div class="related-product-name">Nom du produit</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Sté Rouaa Ceramic</h2>
+                    <p>Votre partenaire en carreaux céramiques de qualité</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Produits</h3>
+                        <ul>
+                            <li><a href="produits.html?effet=pierre">Effet Pierre</a></li>
+                            <li><a href="produits.html?effet=marbre">Effet Marbre</a></li>
+                            <li><a href="produits.html?effet=bois">Effet Bois</a></li>
+                            <li><a href="produits.html?effet=ciment">Effet Ciment</a></li>
+                            <li><a href="produits.html?effet=metal">Effet Métal</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>À propos</h3>
+                        <ul>
+                            <li><a href="apropos.html">Qui sommes-nous</a></li>
+                            <li><a href="points-de-vente.html">Points de vente</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Suivez-nous</h3>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Sté Rouaa Ceramic. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/inspirations.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

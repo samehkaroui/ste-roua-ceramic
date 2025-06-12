@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - Sté Rouaa Ceramic</title>
+    <meta name="description" content="Découvrez les dernières actualités, événements et annonces de Sté Rouaa Ceramic.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .news-container {
+            margin-top: 40px;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .news-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .news-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .news-card:hover .news-image img {
+            transform: scale(1.05);
+        }
+        
+        .news-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #c8a45d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 1;
+        }
+        
+        .news-content {
+            padding: 25px;
+        }
+        
+        .news-date {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .news-date i {
+            margin-right: 8px;
+        }
+        
+        .news-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .news-excerpt {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .news-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .news-category {
+            background-color: #f2f2f2;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .news-filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .news-search {
+            position: relative;
+            max-width: 300px;
+            width: 100%;
+        }
+        
+        .news-search input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 14px;
+        }
+        
+        .news-search button {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .news-categories-filter {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .news-category-filter {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: #f2f2f2;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .news-category-filter:hover,
+        .news-category-filter.active {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            gap: 10px;
+        }
+        
+        .pagination a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f2f2f2;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination a:hover,
+        .pagination a.active {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .featured-news {
+            margin-bottom: 50px;
+        }
+        
+        .featured-news-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .featured-news-card {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .featured-news-image {
+            height: 100%;
+            min-height: 400px;
+            overflow: hidden;
+        }
+        
+        .featured-news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .featured-news-content {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .featured-news-badge {
+            display: inline-block;
+            background-color: #c8a45d;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .featured-news-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        
+        .featured-news-date {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .featured-news-date i {
+            margin-right: 8px;
+        }
+        
+        .featured-news-excerpt {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .placeholder-image {
+            background-color: #eee;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .newsletter-signup {
+            margin-top: 60px;
+            background-color: #f9f9f9;
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .newsletter-signup h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .newsletter-signup p {
+            margin-bottom: 30px;
+            color: #666;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .newsletter-form {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+        }
+        
+        .newsletter-form button {
+            padding: 15px 30px;
+            background-color: #c8a45d;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .newsletter-form button:hover {
+            background-color: #b08d40;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <h1>Sté Rouaa Ceramic</h1>
+                    </a>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation toggle button (hamburger) -->
+    <div class="nav-toggle">
+        <span></span>
+    </div>
+    
+    <!-- Navigation overlay -->
+    <div class="nav-overlay"></div>
+    
+    <!-- Main navigation menu -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="inspirations.html">Inspirations</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="visite360.html">Visite 360</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="produits.html">Tous les produits</a></li>
+            <li><a href="simulateur.html">Simulateur</a></li>
+            <li class="divider"></li>
+            <li><a href="apropos.html">A propos de nous</a></li>
+            <li><a href="points-de-vente.html">Points de vente</a></li>
+            <li><a href="favoris.html">Mes favoris</a></li>
+            <li><a href="news.html" class="active">News</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="en/index.html">English</a></li>
+        </ul>
+        <div class="nav-social">
+            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="container">
+            <h1 class="page-title">Actualités</h1>
+            <p class="page-subtitle">Restez informé des dernières nouvelles, événements et annonces de Sté Rouaa Ceramic.</p>
+            
+            <div class="news-container">
+                <div class="featured-news">
+                    <div class="featured-news-card">
+                        <div class="featured-news-image">
+                            <div class="placeholder-image">Image de l'actualité à la une</div>
+                        </div>
+                        <div class="featured-news-content">
+                            <span class="featured-news-badge">À la une</span>
+                            <h2 class="featured-news-title">Ouverture de notre nouveau showroom à Tunis</h2>
+                            <div class="featured-news-date">
+                                <i class="far fa-calendar-alt"></i> 15 Mai 2025
+                            </div>
+                            <p class="featured-news-excerpt">Nous sommes ravis d'annoncer l'ouverture de notre nouveau showroom à Tunis. Ce nouvel espace de 500m² vous permettra de découvrir toutes nos collections dans un cadre moderne et inspirant. Venez nous rendre visite dès le 1er juin 2025.</p>
+                            <a href="#" class="btn">Lire plus</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="news-filters">
+                    <div class="news-search">
+                        <input type="text" placeholder="Rechercher une actualité...">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                    
+                    <div class="news-categories-filter">
+                        <div class="news-category-filter active" data-category="all">Tous</div>
+                        <div class="news-category-filter" data-category="evenements">Événements</div>
+                        <div class="news-category-filter" data-category="produits">Produits</div>
+                        <div class="news-category-filter" data-category="entreprise">Entreprise</div>
+                    </div>
+                </div>
+                
+                <div class="news-grid">
+                    <!-- News 1 -->
+                    <div class="news-card" data-category="evenements">
+                        <div class="news-image">
+                            <div class="placeholder-image">Image de l'événement</div>
+                            <div class="news-badge">Événement</div>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date">
+                                <i class="far fa-calendar-alt"></i> 10 Mai 2025
+                            </div>
+                            <h3 class="news-title">Sté Rouaa Ceramic participe au Salon de l'Habitat 2025</h3>
+                            <p class="news-excerpt">Venez nous rencontrer au Salon de l'Habitat 2025 qui se tiendra du 15 au 20 juin au Parc des Expositions de Tunis. Nous serons au stand B12.</p>
+                            <a href="#" class="btn">Lire plus</a>
+                        </div>
+                    </div>
+                    
+                    <!-- News 2 -->
+                    <div class="news-card" data-category="produits">
+                        <div class="news-image">
+                            <div class="placeholder-image">Image de la collection</div>
+                            <div class="news-badge">Nouveau produit</div>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date">
+                                <i class="far fa-calendar-alt"></i> 05 Mai 2025
+                            </div>
+                            <h3 class="news-title">Lancement de notre nouvelle collection "Nature"</h3>
+                            <p class="news-excerpt">Découvrez notre nouvelle collection "Nature" inspirée des éléments naturels, avec des carreaux effet pierre, bois et terre cuite.</p>
+                            <a href="#" class="btn">Lire plus</a>
+                        </div>
+                    </div>
+                    
+                    <!-- News 3 -->
+                    <div class="news-card" data-category="entreprise">
+                        <div class="news-image">
+                            <div class="placeholder-image">Image du partenariat</div>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date">
+                                <i class="far fa-calendar-alt"></i> 28 Avril 2025
+                            </div>
+                            <h3 class="news-title">Nouveau partenariat avec des architectes de renom</h3>
+                            <p class="news-excerpt">Sté Rouaa Ceramic annonce un partenariat exclusif avec le cabinet d'architecture XYZ pour développer des collections sur mesure.</p>
+                            <a href="#" class="btn">Lire plus</a>
+                        </div>
+                    </div>
+                    
+                    <!-- News 4 -->
+                    <div class="news-card" data-category="evenements">
+                        <div class="news-image">
+                            <div class="placeholder-image">Image de l'atelier</div>
+                            <div class="news-badge">Événement</div>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date">
+                                <i class="far fa-calendar-alt"></i> 20 Avril 2025
+                            </div>
+                            <h3 class="news-title">Atelier de pose de carrelage grand format</h3>
+                            <p class="news-excerpt">Participez à notre atelier gratuit sur la pose de carrelage grand format, animé par nos experts. Places limitées, inscrivez-vous vite !</p>
+                            <a href="#" class="btn">Lire plus</a>
+                        </div>
+                    </div>
+                    
+                    <!-- News 5 -->
+                    <div class="news-card" data-category="produits">
+                        <div class="news-image">
+                            <div class="placeholder-image">Image du catalogue</div>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date">
+                                <i class="far fa-calendar-alt"></i> 15 Avril 2025
+                            </div>
+                            <h3 class="news-title">Notre catalogue 2025 est disponible</h3>
+                            <p class="news-excerpt">Notre nouveau catalogue 2025 est désormais disponible en téléchargement et en version papier dans tous nos points de vente.</p>
+                            <a href="#" class="btn">Lire plus</a>
+                        </div>
+                    </div>
+                    
+                    <!-- News 6 -->
+                    <div class="news-card" data-category="entreprise">
+                        <div class="news-image">
+                            <div class="placeholder-image">Image de la certification</div>
+                        </div>
+                        <div class="news-content">
+                            <div class="news-date">
+                                <i class="far fa-calendar-alt"></i> 05 Avril 2025
+                            </div>
+                            <h3 class="news-title">Sté Rouaa Ceramic obtient la certification ISO 9001</h3>
+                            <p class="news-excerpt">Nous sommes fiers d'annoncer que notre entreprise a obtenu la certification ISO 9001, attestant de notre engagement envers la qualité.</p>
+                            <a href="#" class="btn">Lire plus</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pagination">
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#"><i class="fas fa-chevron-right"></i></a>
+                </div>
+                
+                <div class="newsletter-signup">
+                    <h2>Restez informé</h2>
+                    <p>Inscrivez-vous à notre newsletter pour recevoir nos dernières actualités et offres exclusives directement dans votre boîte mail.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Votre adresse email" required>
+                        <button type="submit">S'inscrire</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Sté Rouaa Ceramic</h2>
+                    <p>Votre partenaire en carreaux céramiques de qualité</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Produits</h3>
+                        <ul>
+                            <li><a href="produits.html?effet=pierre">Effet Pierre</a></li>
+                            <li><a href="produits.html?effet=marbre">Effet Marbre</a></li>
+                            <li><a href="produits.html?effet=bois">Effet Bois</a></li>
+                            <li><a href="produits.html?effet=ciment">Effet Ciment</a></li>
+                            <li><a href="produits.html?effet=metal">Effet Métal</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>À propos</h3>
+                        <ul>
+                            <li><a href="apropos.html">Qui sommes-nous</a></li>
+                            <li><a href="points-de-vente.html">Points de vente</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Suivez-nous</h3>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Sté Rouaa Ceramic. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category filtering
+            const categoryFilters = document.querySelectorAll('.news-category-filter');
+            const newsCards = document.querySelectorAll('.news-card');
+            
+            categoryFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    // Remove active class from all filters
+                    categoryFilters.forEach(f => f.classList.remove('active'));
+                    
+                    // Add active class to clicked filter
+                    this.classList.add('active');
+                    
+                    const category = this.getAttribute('data-category');
+                    
+                    // Show/hide news cards based on category
+                    newsCards.forEach(card => {
+                        if (category === 'all' || card.getAttribute('data-category') === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.querySelector('.news-search input');
+            
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    
+                    newsCards.forEach(card => {
+                        const title = card.querySelector('.news-title').textContent.toLowerCase();
+                        const excerpt = card.querySelector('.news-excerpt').textContent.toLowerCase();
+                        
+                        if (title.includes(searchTerm) || excerpt.includes(searchTerm)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+            
+            // Newsletter form submission (simulation)
+            const newsletterForm = document.querySelector('.newsletter-form');
+            
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = this.querySelector('input').value.trim();
+                    
+                    if (email) {
+                        alert('Merci pour votre inscription à notre newsletter ! Dans une implémentation réelle, vous recevriez nos actualités à l\'adresse : ' + email);
+                        this.reset();
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

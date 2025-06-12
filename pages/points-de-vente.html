@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Points de vente - Sté Rouaa Ceramic</title>
+    <meta name="description" content="Trouvez les points de vente Sté Rouaa Ceramic près de chez vous. Consultez notre réseau de distributeurs et de showrooms.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .locations-container {
+            margin-top: 40px;
+        }
+        
+        .locations-search {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+        
+        .locations-search input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 16px;
+        }
+        
+        .locations-search button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background-color: #c8a45d;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .locations-search button:hover {
+            background-color: #b08d40;
+        }
+        
+        .locations-map {
+            height: 500px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .locations-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 30px;
+        }
+        
+        .location-tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .location-tab:hover {
+            color: #c8a45d;
+        }
+        
+        .location-tab.active {
+            border-bottom-color: #c8a45d;
+            color: #c8a45d;
+            font-weight: 600;
+        }
+        
+        .locations-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .location-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .location-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .location-image {
+            height: 180px;
+            overflow: hidden;
+        }
+        
+        .location-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .location-details {
+            padding: 20px;
+        }
+        
+        .location-name {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .location-address {
+            margin-bottom: 15px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .location-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .location-contact a {
+            display: flex;
+            align-items: center;
+            color: #666;
+            text-decoration: none;
+        }
+        
+        .location-contact i {
+            margin-right: 10px;
+            color: #c8a45d;
+        }
+        
+        .location-hours {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .location-hours h4 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+        
+        .hours-list {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .hours-list p {
+            margin-bottom: 5px;
+        }
+        
+        .location-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .location-actions a {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f2f2f2;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .location-actions a:hover {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .location-actions i {
+            margin-right: 5px;
+        }
+        
+        .location-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #c8a45d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .placeholder-image {
+            background-color: #eee;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .placeholder-map {
+            background-color: #eee;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 16px;
+        }
+        
+        .placeholder-map i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #c8a45d;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <h1>Sté Rouaa Ceramic</h1>
+                    </a>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation toggle button (hamburger) -->
+    <div class="nav-toggle">
+        <span></span>
+    </div>
+    
+    <!-- Navigation overlay -->
+    <div class="nav-overlay"></div>
+    
+    <!-- Main navigation menu -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="inspirations.html">Inspirations</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="visite360.html">Visite 360</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="produits.html">Tous les produits</a></li>
+            <li><a href="simulateur.html">Simulateur</a></li>
+            <li class="divider"></li>
+            <li><a href="apropos.html">A propos de nous</a></li>
+            <li><a href="points-de-vente.html" class="active">Points de vente</a></li>
+            <li><a href="favoris.html">Mes favoris</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="en/index.html">English</a></li>
+        </ul>
+        <div class="nav-social">
+            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="container">
+            <h1 class="page-title">Points de vente</h1>
+            <p class="page-subtitle">Trouvez les points de vente Sté Rouaa Ceramic près de chez vous.</p>
+            
+            <div class="locations-container">
+                <div class="locations-search">
+                    <input type="text" placeholder="Entrez votre ville ou code postal">
+                    <button type="submit">Rechercher</button>
+                </div>
+                
+                <div class="locations-map">
+                    <div class="placeholder-map">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <p>Carte interactive des points de vente</p>
+                        <p>Dans une implémentation réelle, une carte Google Maps serait intégrée ici</p>
+                    </div>
+                </div>
+                
+                <div class="locations-tabs">
+                    <div class="location-tab active" data-tab="all">Tous les points de vente</div>
+                    <div class="location-tab" data-tab="showrooms">Showrooms</div>
+                    <div class="location-tab" data-tab="distributeurs">Distributeurs</div>
+                    <div class="location-tab" data-tab="revendeurs">Revendeurs</div>
+                </div>
+                
+                <div class="locations-list">
+                    <!-- Location 1 -->
+                    <div class="location-card" data-type="showroom">
+                        <div class="location-image">
+                            <div class="placeholder-image">Image du showroom</div>
+                        </div>
+                        <div class="location-details">
+                            <h3 class="location-name">Showroom Sté Rouaa Ceramic - Tunis</h3>
+                            <p class="location-address">123 Avenue de la République, Tunis 1002, Tunisie</p>
+                            <div class="location-contact">
+                                <a href="tel:+21671123456"><i class="fas fa-phone-alt"></i> +216 71 123 456</a>
+                                <a href="mailto:tunis@rouaaceramic.com"><i class="fas fa-envelope"></i> tunis@rouaaceramic.com</a>
+                            </div>
+                            <div class="location-hours">
+                                <h4>Heures d'ouverture</h4>
+                                <div class="hours-list">
+                                    <p>Lundi - Vendredi: 9h00 - 18h00</p>
+                                    <p>Samedi: 9h00 - 16h00</p>
+                                    <p>Dimanche: Fermé</p>
+                                </div>
+                            </div>
+                            <div class="location-actions">
+                                <a href="#"><i class="fas fa-directions"></i> Itinéraire</a>
+                                <a href="#"><i class="fas fa-info-circle"></i> Détails</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Location 2 -->
+                    <div class="location-card" data-type="showroom">
+                        <div class="location-image">
+                            <div class="placeholder-image">Image du showroom</div>
+                        </div>
+                        <div class="location-details">
+                            <h3 class="location-name">Showroom Sté Rouaa Ceramic - Sousse</h3>
+                            <p class="location-address">45 Avenue Habib Bourguiba, Sousse 4000, Tunisie</p>
+                            <div class="location-contact">
+                                <a href="tel:+21673123456"><i class="fas fa-phone-alt"></i> +216 73 123 456</a>
+                                <a href="mailto:sousse@rouaaceramic.com"><i class="fas fa-envelope"></i> sousse@rouaaceramic.com</a>
+                            </div>
+                            <div class="location-hours">
+                                <h4>Heures d'ouverture</h4>
+                                <div class="hours-list">
+                                    <p>Lundi - Vendredi: 9h00 - 18h00</p>
+                                    <p>Samedi: 9h00 - 16h00</p>
+                                    <p>Dimanche: Fermé</p>
+                                </div>
+                            </div>
+                            <div class="location-actions">
+                                <a href="#"><i class="fas fa-directions"></i> Itinéraire</a>
+                                <a href="#"><i class="fas fa-info-circle"></i> Détails</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Location 3 -->
+                    <div class="location-card" data-type="distributeur">
+                        <div class="location-image">
+                            <div class="placeholder-image">Image du distributeur</div>
+                        </div>
+                        <div class="location-details">
+                            <h3 class="location-name">Carreaux Plus - Distributeur officiel</h3>
+                            <p class="location-address">78 Rue des Artisans, Sfax 3000, Tunisie</p>
+                            <div class="location-contact">
+                                <a href="tel:+21674123456"><i class="fas fa-phone-alt"></i> +216 74 123 456</a>
+                                <a href="mailto:contact@carreauxplus.com"><i class="fas fa-envelope"></i> contact@carreauxplus.com</a>
+                            </div>
+                            <div class="location-hours">
+                                <h4>Heures d'ouverture</h4>
+                                <div class="hours-list">
+                                    <p>Lundi - Vendredi: 8h30 - 17h30</p>
+                                    <p>Samedi: 8h30 - 13h00</p>
+                                    <p>Dimanche: Fermé</p>
+                                </div>
+                            </div>
+                            <div class="location-actions">
+                                <a href="#"><i class="fas fa-directions"></i> Itinéraire</a>
+                                <a href="#"><i class="fas fa-info-circle"></i> Détails</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Location 4 -->
+                    <div class="location-card" data-type="distributeur">
+                        <div class="location-image">
+                            <div class="placeholder-image">Image du distributeur</div>
+                        </div>
+                        <div class="location-details">
+                            <h3 class="location-name">Maison du Carrelage - Distributeur officiel</h3>
+                            <p class="location-address">12 Avenue Mohamed V, Bizerte 7000, Tunisie</p>
+                            <div class="location-contact">
+                                <a href="tel:+21672123456"><i class="fas fa-phone-alt"></i> +216 72 123 456</a>
+                                <a href="mailto:info@maisonducarrelage.com"><i class="fas fa-envelope"></i> info@maisonducarrelage.com</a>
+                            </div>
+                            <div class="location-hours">
+                                <h4>Heures d'ouverture</h4>
+                                <div class="hours-list">
+                                    <p>Lundi - Vendredi: 9h00 - 18h00</p>
+                                    <p>Samedi: 9h00 - 15h00</p>
+                                    <p>Dimanche: Fermé</p>
+                                </div>
+                            </div>
+                            <div class="location-actions">
+                                <a href="#"><i class="fas fa-directions"></i> Itinéraire</a>
+                                <a href="#"><i class="fas fa-info-circle"></i> Détails</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Location 5 -->
+                    <div class="location-card" data-type="revendeur">
+                        <div class="location-image">
+                            <div class="placeholder-image">Image du revendeur</div>
+                        </div>
+                        <div class="location-details">
+                            <h3 class="location-name">Déco & Matériaux - Revendeur agréé</h3>
+                            <p class="location-address">56 Rue des Palmiers, Hammamet 8050, Tunisie</p>
+                            <div class="location-contact">
+                                <a href="tel:+21672987654"><i class="fas fa-phone-alt"></i> +216 72 987 654</a>
+                                <a href="mailto:contact@decomateriaux.com"><i class="fas fa-envelope"></i> contact@decomateriaux.com</a>
+                            </div>
+                            <div class="location-hours">
+                                <h4>Heures d'ouverture</h4>
+                                <div class="hours-list">
+                                    <p>Lundi - Samedi: 8h00 - 18h00</p>
+                                    <p>Dimanche: Fermé</p>
+                                </div>
+                            </div>
+                            <div class="location-actions">
+                                <a href="#"><i class="fas fa-directions"></i> Itinéraire</a>
+                                <a href="#"><i class="fas fa-info-circle"></i> Détails</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Location 6 -->
+                    <div class="location-card" data-type="revendeur">
+                        <div class="location-image">
+                            <div class="placeholder-image">Image du revendeur</div>
+                        </div>
+                        <div class="location-details">
+                            <h3 class="location-name">Habitat Design - Revendeur agréé</h3>
+                            <p class="location-address">23 Avenue Habib Thameur, Monastir 5000, Tunisie</p>
+                            <div class="location-contact">
+                                <a href="tel:+21673456789"><i class="fas fa-phone-alt"></i> +216 73 456 789</a>
+                                <a href="mailto:ventes@habitatdesign.com"><i class="fas fa-envelope"></i> ventes@habitatdesign.com</a>
+                            </div>
+                            <div class="location-hours">
+                                <h4>Heures d'ouverture</h4>
+                                <div class="hours-list">
+                                    <p>Lundi - Vendredi: 9h00 - 17h00</p>
+                                    <p>Samedi: 9h00 - 14h00</p>
+                                    <p>Dimanche: Fermé</p>
+                                </div>
+                            </div>
+                            <div class="location-actions">
+                                <a href="#"><i class="fas fa-directions"></i> Itinéraire</a>
+                                <a href="#"><i class="fas fa-info-circle"></i> Détails</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Sté Rouaa Ceramic</h2>
+                    <p>Votre partenaire en carreaux céramiques de qualité</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Produits</h3>
+                        <ul>
+                            <li><a href="produits.html?effet=pierre">Effet Pierre</a></li>
+                            <li><a href="produits.html?effet=marbre">Effet Marbre</a></li>
+                            <li><a href="produits.html?effet=bois">Effet Bois</a></li>
+                            <li><a href="produits.html?effet=ciment">Effet Ciment</a></li>
+                            <li><a href="produits.html?effet=metal">Effet Métal</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>À propos</h3>
+                        <ul>
+                            <li><a href="apropos.html">Qui sommes-nous</a></li>
+                            <li><a href="points-de-vente.html">Points de vente</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Suivez-nous</h3>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Sté Rouaa Ceramic. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab functionality
+            const locationTabs = document.querySelectorAll('.location-tab');
+            const locationCards = document.querySelectorAll('.location-card');
+            
+            locationTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    locationTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    const tabType = this.getAttribute('data-tab');
+                    
+                    // Show/hide location cards based on tab
+                    locationCards.forEach(card => {
+                        if (tabType === 'all' || card.getAttribute('data-type') === tabType) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Search functionality (simulation)
+            const searchForm = document.querySelector('.locations-search');
+            
+            if (searchForm) {
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const searchInput = this.querySelector('input').value.trim();
+                    
+                    if (searchInput) {
+                        // In a real implementation, this would filter locations based on the search input
+                        alert('Dans une implémentation réelle, cette recherche filtrerait les points de vente en fonction de "' + searchInput + '"');
+                    }
+                });
+            }
+        });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

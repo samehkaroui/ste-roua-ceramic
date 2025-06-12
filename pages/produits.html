@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Produits - Sté Rouaa Ceramic</title>
+    <meta name="description" content="Découvrez notre gamme complète de carreaux céramiques: effet pierre, marbre, bois, ciment et métal.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .product-image {
+            height: 250px;
+            background-color: #f2f2f2;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-info h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .product-info p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        
+        .product-price {
+            font-weight: bold;
+            color: #c8a45d;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .product-actions a {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .product-actions a:hover {
+            color: #c8a45d;
+        }
+        
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .filter-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        .effect-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .effect-tab {
+            padding: 10px 20px;
+            background-color: #f2f2f2;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .effect-tab:hover, .effect-tab.active {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .placeholder-image {
+            background-color: #eee;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <h1>Sté Rouaa Ceramic</h1>
+                    </a>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation toggle button (hamburger) -->
+    <div class="nav-toggle">
+        <span></span>
+    </div>
+    
+    <!-- Navigation overlay -->
+    <div class="nav-overlay"></div>
+    
+    <!-- Main navigation menu -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="inspirations.html">Inspirations</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="visite360.html">Visite 360</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="produits.html" class="active">Tous les produits</a></li>
+            <li><a href="simulateur.html">Simulateur</a></li>
+            <li class="divider"></li>
+            <li><a href="apropos.html">A propos de nous</a></li>
+            <li><a href="points-de-vente.html">Points de vente</a></li>
+            <li><a href="favoris.html">Mes favoris</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="en/index.html">English</a></li>
+        </ul>
+        <div class="nav-social">
+            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="container">
+            <h1 class="page-title">Nos Produits</h1>
+            
+            <div class="effect-tabs">
+                <div class="effect-tab active" data-effect="all">Tous les produits</div>
+                <div class="effect-tab" data-effect="pierre">Effet Pierre</div>
+                <div class="effect-tab" data-effect="marbre">Effet Marbre</div>
+                <div class="effect-tab" data-effect="bois">Effet Bois</div>
+                <div class="effect-tab" data-effect="ciment">Effet Ciment</div>
+                <div class="effect-tab" data-effect="metal">Effet Métal</div>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="filter-format">Format</label>
+                    <select id="filter-format">
+                        <option value="">Tous les formats</option>
+                        <option value="30x60">30x60 cm</option>
+                        <option value="60x60">60x60 cm</option>
+                        <option value="45x45">45x45 cm</option>
+                        <option value="80x80">80x80 cm</option>
+                        <option value="120x60">120x60 cm</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-usage">Usage</label>
+                    <select id="filter-usage">
+                        <option value="">Tous les usages</option>
+                        <option value="sol">Sol</option>
+                        <option value="mur">Mur</option>
+                        <option value="sol-mur">Sol et Mur</option>
+                        <option value="exterieur">Extérieur</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-color">Couleur</label>
+                    <select id="filter-color">
+                        <option value="">Toutes les couleurs</option>
+                        <option value="beige">Beige</option>
+                        <option value="blanc">Blanc</option>
+                        <option value="gris">Gris</option>
+                        <option value="noir">Noir</option>
+                        <option value="marron">Marron</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="products-grid">
+                <!-- Effet Pierre -->
+                <div class="product-card" data-effect="pierre" data-format="60x60" data-usage="sol-mur" data-color="beige">
+                    <div class="product-image">
+                        <div class="placeholder-image">Image du produit (Pierre 1)</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Travertin Beige</h3>
+                        <p>Carrelage effet pierre naturelle, idéal pour salon et entrée.</p>
+                        <div class="product-meta">
+                            <span class="product-price">Format: 60x60 cm</span>
+                            <div class="product-actions">
+                                <a href="#" title="Ajouter aux favoris"><i class="far fa-heart"></i></a>
+                                <a href="#" title="Voir détails"><i class="fas fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-effect="pierre" data-format="80x80" data-usage="sol" data-color="gris">
+                    <div class="product-image">
+                        <div class="placeholder-image">Image du produit (Pierre 2)</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Ardoise Grise</h3>
+                        <p>Carrelage effet pierre ardoise, parfait pour un style contemporain.</p>
+                        <div class="product-meta">
+                            <span class="product-price">Format: 80x80 cm</span>
+                            <div class="product-actions">
+                                <a href="#" title="Ajouter aux favoris"><i class="far fa-heart"></i></a>
+                                <a href="#" title="Voir détails"><i class="fas fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Effet Marbre -->
+                <div class="product-card" data-effect="marbre" data-format="60x60" data-usage="sol-mur" data-color="blanc">
+                    <div class="product-image">
+                        <div class="placeholder-image">Image du produit (Marbre 1)</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Carrara Blanc</h3>
+                        <p>Carrelage effet marbre blanc de Carrare, élégant et lumineux.</p>
+                        <div class="product-meta">
+                            <span class="product-price">Format: 60x60 cm</span>
+                            <div class="product-actions">
+                                <a href="#" title="Ajouter aux favoris"><i class="far fa-heart"></i></a>
+                                <a href="#" title="Voir détails"><i class="fas fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-effect="marbre" data-format="120x60" data-usage="sol" data-color="noir">
+                    <div class="product-image">
+                        <div class="placeholder-image">Image du produit (Marbre 2)</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Marquina Noir</h3>
+                        <p>Carrelage effet marbre noir veiné, pour un intérieur sophistiqué.</p>
+                        <div class="product-meta">
+                            <span class="product-price">Format: 120x60 cm</span>
+                            <div class="product-actions">
+                                <a href="#" title="Ajouter aux favoris"><i class="far fa-heart"></i></a>
+                                <a href="#" title="Voir détails"><i class="fas fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Effet Bois -->
+                <div class="product-card" data-effect="bois" data-format="30x60" data-usage="sol" data-color="marron">
+                    <div class="product-image">
+                        <div class="placeholder-image">Image du produit (Bois 1)</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Chêne Naturel</h3>
+                        <p>Carrelage imitation bois de chêne, chaleureux et authentique.</p>
+                        <div class="product-meta">
+                            <span class="product-price">Format: 30x60 cm</span>
+                            <div class="product-actions">
+                                <a href="#" title="Ajouter aux favoris"><i class="far fa-heart"></i></a>
+                                <a href="#" title="Voir détails"><i class="fas fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-effect="bois" data-format="120x60" data-usage="sol" data-color="gris">
+                    <div class="product-image">
+                        <div class="placeholder-image">Image du produit (Bois 2)</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Bois Grisé</h3>
+                        <p>Carrelage imitation bois vieilli, idéal pour un style scandinave.</p>
+                        <div class="product-meta">
+                            <span class="product-price">Format: 120x60 cm</span>
+                            <div class="product-actions">
+                                <a href="#" title="Ajouter aux favoris"><i class="far fa-heart"></i></a>
+                                <a href="#" title="Voir détails"><i class="fas fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Effet Ciment -->
+                <div class="product-card" data-effect="ciment" data-format="60x60" data-usage="sol-mur" data-color="gris">
+                    <div class="product-image">
+                        <div class="placeholder-image">Image du produit (Ciment 1)</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Béton Ciré</h3>
+                        <p>Carrelage effet béton ciré, pour un style industriel contemporain.</p>
+                        <div class="product-meta">
+                            <span class="product-price">Format: 60x60 cm</span>
+                            <div class="product-actions">
+                                <a href="#" title="Ajouter aux favoris"><i class="far fa-heart"></i></a>
+                                <a href="#" title="Voir détails"><i class="fas fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-effect="ciment" data-format="80x80" data-usage="sol" data-color="beige">
+                    <div class="product-image">
+                        <div class="placeholder-image">Image du produit (Ciment 2)</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Ciment Beige</h3>
+                        <p>Carrelage effet ciment, sobre et élégant pour tous les espaces.</p>
+                        <div class="product-meta">
+                            <span class="product-price">Format: 80x80 cm</span>
+                            <div class="product-actions">
+                                <a href="#" title="Ajouter aux favoris"><i class="far fa-heart"></i></a>
+                                <a href="#" title="Voir détails"><i class="fas fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Effet Métal -->
+                <div class="product-card" data-effect="metal" data-format="60x60" data-usage="mur" data-color="gris">
+                    <div class="product-image">
+                        <div class="placeholder-image">Image du produit (Métal 1)</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Acier Brossé</h3>
+                        <p>Carrelage effet métal brossé, pour un style industriel moderne.</p>
+                        <div class="product-meta">
+                            <span class="product-price">Format: 60x60 cm</span>
+                            <div class="product-actions">
+                                <a href="#" title="Ajouter aux favoris"><i class="far fa-heart"></i></a>
+                                <a href="#" title="Voir détails"><i class="fas fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card" data-effect="metal" data-format="30x60" data-usage="mur" data-color="noir">
+                    <div class="product-image">
+                        <div class="placeholder-image">Image du produit (Métal 2)</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>Métal Oxydé</h3>
+                        <p>Carrelage effet métal oxydé, pour un style industriel authentique.</p>
+                        <div class="product-meta">
+                            <span class="product-price">Format: 30x60 cm</span>
+                            <div class="product-actions">
+                                <a href="#" title="Ajouter aux favoris"><i class="far fa-heart"></i></a>
+                                <a href="#" title="Voir détails"><i class="fas fa-search"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Sté Rouaa Ceramic</h2>
+                    <p>Votre partenaire en carreaux céramiques de qualité</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Produits</h3>
+                        <ul>
+                            <li><a href="produits.html?effet=pierre">Effet Pierre</a></li>
+                            <li><a href="produits.html?effet=marbre">Effet Marbre</a></li>
+                            <li><a href="produits.html?effet=bois">Effet Bois</a></li>
+                            <li><a href="produits.html?effet=ciment">Effet Ciment</a></li>
+                            <li><a href="produits.html?effet=metal">Effet Métal</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>À propos</h3>
+                        <ul>
+                            <li><a href="apropos.html">Qui sommes-nous</a></li>
+                            <li><a href="points-de-vente.html">Points de vente</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Suivez-nous</h3>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Sté Rouaa Ceramic. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter products by effect tab
+            const effectTabs = document.querySelectorAll('.effect-tab');
+            const productCards = document.querySelectorAll('.product-card');
+            
+            effectTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    effectTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    const effect = this.getAttribute('data-effect');
+                    
+                    // Show/hide products based on effect
+                    productCards.forEach(card => {
+                        if (effect === 'all' || card.getAttribute('data-effect') === effect) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Filter products by dropdown selections
+            const formatFilter = document.getElementById('filter-format');
+            const usageFilter = document.getElementById('filter-usage');
+            const colorFilter = document.getElementById('filter-color');
+            
+            function applyFilters() {
+                const formatValue = formatFilter.value;
+                const usageValue = usageFilter.value;
+                const colorValue = colorFilter.value;
+                
+                productCards.forEach(card => {
+                    let showCard = true;
+                    
+                    if (formatValue && card.getAttribute('data-format') !== formatValue) {
+                        showCard = false;
+                    }
+                    
+                    if (usageValue && card.getAttribute('data-usage') !== usageValue) {
+                        showCard = false;
+                    }
+                    
+                    if (colorValue && card.getAttribute('data-color') !== colorValue) {
+                        showCard = false;
+                    }
+                    
+                    card.style.display = showCard ? 'block' : 'none';
+                });
+            }
+            
+            formatFilter.addEventListener('change', applyFilters);
+            usageFilter.addEventListener('change', applyFilters);
+            colorFilter.addEventListener('change', applyFilters);
+            
+            // Check URL parameters for pre-filtering
+            const urlParams = new URLSearchParams(window.location.search);
+            const effectParam = urlParams.get('effet');
+            
+            if (effectParam) {
+                const matchingTab = document.querySelector(`.effect-tab[data-effect="${effectParam}"]`);
+                if (matchingTab) {
+                    matchingTab.click();
+                }
+            }
+        });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

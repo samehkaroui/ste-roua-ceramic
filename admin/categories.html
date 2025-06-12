@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Catégories - Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #c8a45d;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-container, .table-container {
+            margin-bottom: 40px;
+        }
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, textarea:focus {
+            border-color: #c8a45d;
+            outline: none;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.2s;
+            text-transform: uppercase;
+        }
+        .btn-primary {
+            background-color: #c8a45d;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #b08d40;
+            transform: translateY(-2px);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f9f9f9;
+        }
+        .actions a {
+            color: #c8a45d;
+            margin-right: 15px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .actions a:hover {
+            color: #b08d40;
+        }
+        .actions .delete-btn {
+            color: #e74c3c;
+        }
+        .actions .delete-btn:hover {
+            color: #c0392b;
+        }
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover, .close-btn:focus {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Gestion des Catégories de Produits</h1>
+
+        <div class="form-container">
+            <h2>Ajouter une Nouvelle Catégorie</h2>
+            <form id="add-category-form" class="form-grid">
+                <input type="text" id="title" placeholder="Titre de la catégorie" required>
+                <textarea id="description" placeholder="Description de la catégorie" required></textarea>
+                <button type="submit" class="btn btn-primary">Ajouter la Catégorie</button>
+            </form>
+        </div>
+
+        <div class="table-container">
+            <h2>Catégories Existantes</h2>
+            <table id="categories-table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Les catégories seront chargées ici par JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal pour l'édition -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Modifier la Catégorie</h2>
+            <form id="edit-category-form" class="form-grid">
+                <input type="hidden" id="edit-id">
+                <input type="text" id="edit-title" placeholder="Titre de la catégorie" required>
+                <textarea id="edit-description" placeholder="Description de la catégorie" required></textarea>
+                <button type="submit" class="btn btn-primary">Sauvegarder les Modifications</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableBody = document.querySelector('#categories-table tbody');
+            const addForm = document.getElementById('add-category-form');
+            const editModal = document.getElementById('edit-modal');
+            const editForm = document.getElementById('edit-category-form');
+            const closeModal = document.querySelector('.close-btn');
+
+            // Charger les catégories
+            async function loadCategories() {
+                try {
+                    const response = await fetch('/api/product-categories');
+                    const categories = await response.json();
+                    tableBody.innerHTML = ''; // Vider la table
+                    categories.forEach(category => {
+                        const row = `
+                            <tr data-id="${category.id}">
+                                <td>${category.title}</td>
+                                <td>${category.description}</td>
+                                <td class="actions">
+                                    <a class="edit-btn" title="Modifier"><i class="fas fa-edit"></i></a>
+                                    <a class="delete-btn" title="Supprimer"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                } catch (error) {
+                    console.error('Erreur lors du chargement des catégories:', error);
+                    alert('Impossible de charger les catégories.');
+                }
+            }
+
+            // Ajouter une catégorie
+            addForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const title = document.getElementById('title').value;
+                const description = document.getElementById('description').value;
+
+                try {
+                    const response = await fetch('/api/product-categories', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title, description })
+                    });
+                    if (response.ok) {
+                        addForm.reset();
+                        loadCategories();
+                        alert('Catégorie ajoutée avec succès!');
+                    } else {
+                        throw new Error('La requête a échoué');
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de l\'ajout:', error);
+                    alert('Erreur lors de l\'ajout de la catégorie.');
+                }
+            });
+
+            // Gérer les clics sur les boutons d'action (Modifier/Supprimer)
+            tableBody.addEventListener('click', function(e) {
+                const target = e.target.closest('a');
+                if (!target) return;
+
+                const row = target.closest('tr');
+                const id = row.dataset.id;
+
+                if (target.classList.contains('delete-btn')) {
+                    deleteCategory(id);
+                } else if (target.classList.contains('edit-btn')) {
+                    openEditModal(id, row);
+                }
+            });
+
+            // Supprimer une catégorie
+            async function deleteCategory(id) {
+                if (!confirm('Êtes-vous sûr de vouloir supprimer cette catégorie?')) return;
+
+                try {
+                    const response = await fetch(`/api/product-categories/${id}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        loadCategories();
+                        alert('Catégorie supprimée avec succès!');
+                    } else {
+                        throw new Error('La suppression a échoué');
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de la suppression:', error);
+                    alert('Erreur lors de la suppression de la catégorie.');
+                }
+            }
+
+            // Ouvrir et peupler le modal de modification
+            function openEditModal(id, row) {
+                document.getElementById('edit-id').value = id;
+                document.getElementById('edit-title').value = row.cells[0].textContent;
+                document.getElementById('edit-description').value = row.cells[1].textContent;
+                editModal.style.display = 'block';
+            }
+
+            // Fermer le modal
+            closeModal.onclick = () => editModal.style.display = 'none';
+            window.onclick = (event) => {
+                if (event.target == editModal) {
+                    editModal.style.display = 'none';
+                }
+            };
+
+            // Modifier une catégorie
+            editForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const id = document.getElementById('edit-id').value;
+                const title = document.getElementById('edit-title').value;
+                const description = document.getElementById('edit-description').value;
+
+                try {
+                    const response = await fetch(`/api/product-categories/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title, description })
+                    });
+                    if (response.ok) {
+                        editModal.style.display = 'none';
+                        loadCategories();
+                        alert('Catégorie mise à jour avec succès!');
+                    } else {
+                        throw new Error('La mise à jour a échoué');
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de la mise à jour:', error);
+                    alert('Erreur lors de la mise à jour de la catégorie.');
+                }
+            });
+
+            // Chargement initial
+            loadCategories();
+        });
+    </script>
+
+</body>
+</html>

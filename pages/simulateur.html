@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur - Sté Rouaa Ceramic</title>
+    <meta name="description" content="Utilisez notre simulateur pour visualiser nos carreaux céramiques dans votre espace et trouvez le style parfait pour votre projet.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .simulator-container {
+            margin-top: 40px;
+        }
+        
+        .simulator-intro {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+        
+        .simulator-intro p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            color: #666;
+        }
+        
+        .simulator-wrapper {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 992px) {
+            .simulator-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .simulator-sidebar {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-right: 1px solid #eee;
+        }
+        
+        .simulator-main {
+            padding: 30px;
+        }
+        
+        .simulator-view {
+            width: 100%;
+            height: 500px;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .simulator-room {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .simulator-tile-area {
+            position: absolute;
+            background-color: rgba(200, 164, 93, 0.3);
+            border: 2px dashed #c8a45d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c8a45d;
+            font-weight: bold;
+        }
+        
+        .simulator-floor {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+        }
+        
+        .simulator-wall {
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 70%;
+        }
+        
+        .simulator-controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .simulator-control {
+            padding: 10px 20px;
+            background-color: #f2f2f2;
+            border: none;
+            border-radius: 30px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .simulator-control:hover,
+        .simulator-control.active {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .simulator-control i {
+            margin-right: 8px;
+        }
+        
+        .simulator-section {
+            margin-bottom: 30px;
+        }
+        
+        .simulator-section h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .room-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .room-option {
+            border: 2px solid #eee;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .room-option:hover,
+        .room-option.active {
+            border-color: #c8a45d;
+        }
+        
+        .room-option img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+        }
+        
+        .room-option-title {
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+            background-color: #f9f9f9;
+        }
+        
+        .tile-options {
+            height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .tile-option {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tile-option:hover,
+        .tile-option.active {
+            border-color: #c8a45d;
+            background-color: rgba(200, 164, 93, 0.05);
+        }
+        
+        .tile-option-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .tile-option-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .tile-option-info {
+            flex: 1;
+        }
+        
+        .tile-option-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .tile-option-desc {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-option {
+            padding: 8px 15px;
+            background-color: #f2f2f2;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-option:hover,
+        .filter-option.active {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .simulator-actions {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .simulator-action {
+            padding: 12px;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .simulator-action i {
+            margin-right: 8px;
+        }
+        
+        .save-btn {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .save-btn:hover {
+            background-color: #b08d40;
+        }
+        
+        .share-btn {
+            background-color: #f2f2f2;
+            color: #666;
+        }
+        
+        .share-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .reset-btn {
+            background-color: #f9f9f9;
+            color: #666;
+            border: 1px solid #eee;
+        }
+        
+        .reset-btn:hover {
+            background-color: #f2f2f2;
+        }
+        
+        .placeholder-image {
+            background-color: #eee;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover {
+            border-color: #c8a45d;
+            background-color: rgba(200, 164, 93, 0.05);
+        }
+        
+        .upload-area i {
+            font-size: 30px;
+            color: #c8a45d;
+            margin-bottom: 10px;
+        }
+        
+        .upload-area p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .upload-area span {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .simulator-help {
+            margin-top: 60px;
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+        }
+        
+        .simulator-help h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .help-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .help-step {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .help-step-number {
+            width: 40px;
+            height: 40px;
+            background-color: #c8a45d;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+        }
+        
+        .help-step h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .help-step p {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <h1>Sté Rouaa Ceramic</h1>
+                    </a>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation toggle button (hamburger) -->
+    <div class="nav-toggle">
+        <span></span>
+    </div>
+    
+    <!-- Navigation overlay -->
+    <div class="nav-overlay"></div>
+    
+    <!-- Main navigation menu -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="inspirations.html">Inspirations</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="visite360.html">Visite 360</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="produits.html">Tous les produits</a></li>
+            <li><a href="simulateur.html" class="active">Simulateur</a></li>
+            <li class="divider"></li>
+            <li><a href="apropos.html">A propos de nous</a></li>
+            <li><a href="points-de-vente.html">Points de vente</a></li>
+            <li><a href="favoris.html">Mes favoris</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="en/index.html">English</a></li>
+        </ul>
+        <div class="nav-social">
+            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="container">
+            <h1 class="page-title">Simulateur de Carrelage</h1>
+            <p class="page-subtitle">Visualisez nos carreaux céramiques dans votre espace</p>
+            
+            <div class="simulator-container">
+                <div class="simulator-intro">
+                    <p>Notre simulateur vous permet de visualiser comment nos carreaux céramiques s'intégreront dans différents espaces. Choisissez parmi nos pièces prédéfinies ou téléchargez votre propre photo pour une expérience personnalisée.</p>
+                    <p>Sélectionnez une pièce, choisissez la zone à carreler (sol ou mur), puis parcourez notre collection pour trouver le carreau parfait pour votre projet.</p>
+                </div>
+                
+                <div class="simulator-wrapper">
+                    <div class="simulator-sidebar">
+                        <div class="simulator-section">
+                            <h3>Choisir une pièce</h3>
+                            <div class="room-options">
+                                <div class="room-option active">
+                                    <div class="placeholder-image">Cuisine</div>
+                                    <div class="room-option-title">Cuisine</div>
+                                </div>
+                                <div class="room-option">
+                                    <div class="placeholder-image">Salle de bain</div>
+                                    <div class="room-option-title">Salle de bain</div>
+                                </div>
+                                <div class="room-option">
+                                    <div class="placeholder-image">Salon</div>
+                                    <div class="room-option-title">Salon</div>
+                                </div>
+                                <div class="room-option">
+                                    <div class="placeholder-image">Extérieur</div>
+                                    <div class="room-option-title">Extérieur</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulator-section">
+                            <h3>Filtrer les carreaux</h3>
+                            <div class="filter-options">
+                                <div class="filter-option active">Tous</div>
+                                <div class="filter-option">Effet Pierre</div>
+                                <div class="filter-option">Effet Marbre</div>
+                                <div class="filter-option">Effet Bois</div>
+                                <div class="filter-option">Effet Ciment</div>
+                                <div class="filter-option">Effet Métal</div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulator-section">
+                            <h3>Sélectionner un carreau</h3>
+                            <div class="tile-options">
+                                <div class="tile-option active">
+                                    <div class="tile-option-image">
+                                        <div class="placeholder-image"></div>
+                                    </div>
+                                    <div class="tile-option-info">
+                                        <div class="tile-option-title">Marbre Blanc</div>
+                                        <div class="tile-option-desc">60x60cm • Brillant</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tile-option">
+                                    <div class="tile-option-image">
+                                        <div class="placeholder-image"></div>
+                                    </div>
+                                    <div class="tile-option-info">
+                                        <div class="tile-option-title">Bois Chêne</div>
+                                        <div class="tile-option-desc">20x120cm • Mat</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tile-option">
+                                    <div class="tile-option-image">
+                                        <div class="placeholder-image"></div>
+                                    </div>
+                                    <div class="tile-option-info">
+                                        <div class="tile-option-title">Pierre Grise</div>
+                                        <div class="tile-option-desc">45x45cm • Antidérapant</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tile-option">
+                                    <div class="tile-option-image">
+                                        <div class="placeholder-image"></div>
+                                    </div>
+                                    <div class="tile-option-info">
+                                        <div class="tile-option-title">Ciment Décoré</div>
+                                        <div class="tile-option-desc">20x20cm • Mat</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tile-option">
+                                    <div class="tile-option-image">
+                                        <div class="placeholder-image"></div>
+                                    </div>
+                                    <div class="tile-option-info">
+                                        <div class="tile-option-title">Marbre Noir</div>
+                                        <div class="tile-option-desc">60x120cm • Brillant</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tile-option">
+                                    <div class="tile-option-image">
+                                        <div class="placeholder-image"></div>
+                                    </div>
+                                    <div class="tile-option-info">
+                                        <div class="tile-option-title">Bois Noyer</div>
+                                        <div class="tile-option-desc">20x120cm • Mat</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulator-actions">
+                            <div class="simulator-action save-btn">
+                                <i class="far fa-save"></i> Sauvegarder le design
+                            </div>
+                            <div class="simulator-action share-btn">
+                                <i class="fas fa-share-alt"></i> Partager
+                            </div>
+                            <div class="simulator-action reset-btn">
+                                <i class="fas fa-undo"></i> Réinitialiser
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="simulator-main">
+                        <div class="simulator-controls">
+                            <div class="simulator-control active">
+                                <i class="fas fa-border-all"></i> Sol
+                            </div>
+                            <div class="simulator-control">
+                                <i class="fas fa-square"></i> Mur
+                            </div>
+                            <div class="simulator-control">
+                                <i class="fas fa-th"></i> Motif
+                            </div>
+                            <div class="simulator-control">
+                                <i class="fas fa-adjust"></i> Joints
+                            </div>
+                        </div>
+                        
+                        <div class="simulator-view">
+                            <div class="simulator-room">
+                                <div class="placeholder-image">
+                                    <p>Visualisation de la pièce avec les carreaux sélectionnés</p>
+                                    <p><small>Dans une implémentation réelle, cette zone afficherait une image de cuisine avec les carreaux appliqués au sol et aux murs</small></p>
+                                </div>
+                                <div class="simulator-tile-area simulator-floor">Sol</div>
+                                <div class="simulator-tile-area simulator-wall">Mur</div>
+                            </div>
+                        </div>
+                        
+                        <p>Téléchargez votre propre photo pour une simulation personnalisée :</p>
+                        <div class="upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Glissez et déposez votre photo ici</p>
+                            <span>ou cliquez pour sélectionner un fichier (JPG, PNG • Max 5MB)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="simulator-help">
+                    <h2>Comment utiliser le simulateur</h2>
+                    <div class="help-steps">
+                        <div class="help-step">
+                            <div class="help-step-number">1</div>
+                            <h3>Choisissez une pièce</h3>
+                            <p>Sélectionnez l'une de nos pièces prédéfinies ou téléchargez votre propre photo.</p>
+                        </div>
+                        <div class="help-step">
+                            <div class="help-step-number">2</div>
+                            <h3>Sélectionnez la zone</h3>
+                            <p>Choisissez si vous souhaitez visualiser les carreaux sur le sol ou sur les murs.</p>
+                        </div>
+                        <div class="help-step">
+                            <div class="help-step-number">3</div>
+                            <h3>Choisissez un carreau</h3>
+                            <p>Parcourez notre collection et sélectionnez le carreau qui vous plaît.</p>
+                        </div>
+                        <div class="help-step">
+                            <div class="help-step-number">4</div>
+                            <h3>Sauvegardez ou partagez</h3>
+                            <p>Enregistrez votre design ou partagez-le avec vos amis et votre famille.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Sté Rouaa Ceramic</h2>
+                    <p>Votre partenaire en carreaux céramiques de qualité</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Produits</h3>
+                        <ul>
+                            <li><a href="produits.html?effet=pierre">Effet Pierre</a></li>
+                            <li><a href="produits.html?effet=marbre">Effet Marbre</a></li>
+                            <li><a href="produits.html?effet=bois">Effet Bois</a></li>
+                            <li><a href="produits.html?effet=ciment">Effet Ciment</a></li>
+                            <li><a href="produits.html?effet=metal">Effet Métal</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>À propos</h3>
+                        <ul>
+                            <li><a href="apropos.html">Qui sommes-nous</a></li>
+                            <li><a href="points-de-vente.html">Points de vente</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Suivez-nous</h3>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Sté Rouaa Ceramic. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Room options functionality
+            const roomOptions = document.querySelectorAll('.room-option');
+            
+            roomOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    roomOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // In a real implementation, this would change the room image
+                    const roomType = this.querySelector('.room-option-title').textContent;
+                    console.log(`Selected room: ${roomType}`);
+                });
+            });
+            
+            // Filter options functionality
+            const filterOptions = document.querySelectorAll('.filter-option');
+            
+            filterOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    filterOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // In a real implementation, this would filter the tile options
+                    const filterType = this.textContent;
+                    console.log(`Selected filter: ${filterType}`);
+                });
+            });
+            
+            // Tile options functionality
+            const tileOptions = document.querySelectorAll('.tile-option');
+            
+            tileOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    tileOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    // In a real implementation, this would change the tile in the simulator view
+                    const tileType = this.querySelector('.tile-option-title').textContent;
+                    console.log(`Selected tile: ${tileType}`);
+                });
+            });
+            
+            // Simulator controls functionality
+            const simulatorControls = document.querySelectorAll('.simulator-control');
+            
+            simulatorControls.forEach(control => {
+                control.addEventListener('click', function() {
+                    // Remove active class from all controls
+                    simulatorControls.forEach(ctrl => ctrl.classList.remove('active'));
+                    
+                    // Add active class to clicked control
+                    this.classList.add('active');
+                    
+                    // In a real implementation, this would change the active area in the simulator
+                    const controlType = this.textContent.trim();
+                    console.log(`Selected control: ${controlType}`);
+                });
+            });
+            
+            // Simulator actions functionality
+            const saveBtn = document.querySelector('.save-btn');
+            const shareBtn = document.querySelector('.share-btn');
+            const resetBtn = document.querySelector('.reset-btn');
+            
+            saveBtn.addEventListener('click', function() {
+                alert('Dans une implémentation réelle, cette action sauvegarderait votre design dans votre compte.');
+            });
+            
+            shareBtn.addEventListener('click', function() {
+                alert('Dans une implémentation réelle, cette action ouvrirait des options de partage (email, réseaux sociaux, etc.).');
+            });
+            
+            resetBtn.addEventListener('click', function() {
+                alert('Dans une implémentation réelle, cette action réinitialiserait le simulateur à son état par défaut.');
+            });
+            
+            // Upload area functionality
+            const uploadArea = document.querySelector('.upload-area');
+            
+            uploadArea.addEventListener('click', function() {
+                alert('Dans une implémentation réelle, cette action ouvrirait une boîte de dialogue pour sélectionner une image à télécharger.');
+            });
+            
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            // Highlight drop area when item is dragged over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                uploadArea.classList.add('highlight');
+            }
+            
+            function unhighlight() {
+                uploadArea.classList.remove('highlight');
+            }
+            
+            // Handle dropped files
+            uploadArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    alert(`Dans une implémentation réelle, le fichier "${files[0].name}" serait téléchargé et utilisé comme image de fond pour le simulateur.`);
+                }
+            }
+        });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

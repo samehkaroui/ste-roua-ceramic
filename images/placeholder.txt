@@ -1,0 +1,13 @@
+This folder contains placeholder images for the Sté Rouaa Ceramic website.
+
+For a complete website, you should replace these placeholder images with actual images of:
+- Hero banner (hero-1.jpg)
+- Blog post thumbnails (blog-1.jpg, blog-2.jpg)
+- Product category images
+- Company logo
+
+Image dimensions recommendations:
+- Hero banner: 1920x1080px
+- Blog thumbnails: 800x600px
+- Product images: 800x800px
+- Logo: 200x80px

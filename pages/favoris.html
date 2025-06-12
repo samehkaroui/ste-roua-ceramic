@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Favoris - Sté Rouaa Ceramic</title>
+    <meta name="description" content="Consultez et gérez vos produits favoris Sté Rouaa Ceramic.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .favorites-container {
+            margin-top: 40px;
+        }
+        
+        .favorites-empty {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        
+        .favorites-empty i {
+            font-size: 50px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .favorites-empty h2 {
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .favorites-empty p {
+            color: #888;
+            margin-bottom: 25px;
+        }
+        
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .favorite-item {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .favorite-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .favorite-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .favorite-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .favorite-item:hover .favorite-image img {
+            transform: scale(1.05);
+        }
+        
+        .favorite-remove {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+        
+        .favorite-remove:hover {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        
+        .favorite-content {
+            padding: 20px;
+        }
+        
+        .favorite-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .favorite-category {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .favorite-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .favorite-action {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .view-btn {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .view-btn:hover {
+            background-color: #b08d40;
+        }
+        
+        .add-cart-btn {
+            background-color: #f2f2f2;
+            color: #666;
+        }
+        
+        .add-cart-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .favorites-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .favorites-count {
+            color: #666;
+        }
+        
+        .favorites-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .favorites-action {
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .favorites-action i {
+            margin-right: 8px;
+        }
+        
+        .clear-btn {
+            background-color: #f2f2f2;
+            color: #666;
+        }
+        
+        .clear-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .share-btn {
+            background-color: #c8a45d;
+            color: white;
+        }
+        
+        .share-btn:hover {
+            background-color: #b08d40;
+        }
+        
+        .placeholder-image {
+            background-color: #eee;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .login-prompt {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .login-prompt h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .login-prompt p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        
+        .login-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #c8a45d;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            background-color: #b08d40;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <h1>Sté Rouaa Ceramic</h1>
+                    </a>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation toggle button (hamburger) -->
+    <div class="nav-toggle">
+        <span></span>
+    </div>
+    
+    <!-- Navigation overlay -->
+    <div class="nav-overlay"></div>
+    
+    <!-- Main navigation menu -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="inspirations.html">Inspirations</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="visite360.html">Visite 360</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="produits.html">Tous les produits</a></li>
+            <li><a href="simulateur.html">Simulateur</a></li>
+            <li class="divider"></li>
+            <li><a href="apropos.html">A propos de nous</a></li>
+            <li><a href="points-de-vente.html">Points de vente</a></li>
+            <li><a href="favoris.html" class="active">Mes favoris</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="en/index.html">English</a></li>
+        </ul>
+        <div class="nav-social">
+            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <div class="container">
+            <h1 class="page-title">Mes Favoris</h1>
+            <p class="page-subtitle">Retrouvez tous vos produits préférés en un seul endroit</p>
+            
+            <div class="favorites-container">
+                <!-- Version connectée avec des favoris -->
+                <div id="favorites-logged-in">
+                    <div class="favorites-header">
+                        <div class="favorites-count">6 produits favoris</div>
+                        <div class="favorites-actions">
+                            <div class="favorites-action clear-btn">
+                                <i class="far fa-trash-alt"></i> Tout supprimer
+                            </div>
+                            <div class="favorites-action share-btn">
+                                <i class="fas fa-share-alt"></i> Partager ma liste
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="favorites-grid">
+                        <!-- Favori 1 -->
+                        <div class="favorite-item">
+                            <div class="favorite-image">
+                                <div class="placeholder-image">Image du carreau</div>
+                                <div class="favorite-remove">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="favorite-content">
+                                <h3 class="favorite-title">Carreau Marbre Blanc</h3>
+                                <div class="favorite-category">Effet Marbre • 60x60cm</div>
+                                <div class="favorite-actions">
+                                    <div class="favorite-action view-btn">Voir le produit</div>
+                                    <div class="favorite-action add-cart-btn">Demander un devis</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Favori 2 -->
+                        <div class="favorite-item">
+                            <div class="favorite-image">
+                                <div class="placeholder-image">Image du carreau</div>
+                                <div class="favorite-remove">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="favorite-content">
+                                <h3 class="favorite-title">Carreau Bois Chêne</h3>
+                                <div class="favorite-category">Effet Bois • 20x120cm</div>
+                                <div class="favorite-actions">
+                                    <div class="favorite-action view-btn">Voir le produit</div>
+                                    <div class="favorite-action add-cart-btn">Demander un devis</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Favori 3 -->
+                        <div class="favorite-item">
+                            <div class="favorite-image">
+                                <div class="placeholder-image">Image du carreau</div>
+                                <div class="favorite-remove">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="favorite-content">
+                                <h3 class="favorite-title">Carreau Pierre Grise</h3>
+                                <div class="favorite-category">Effet Pierre • 45x45cm</div>
+                                <div class="favorite-actions">
+                                    <div class="favorite-action view-btn">Voir le produit</div>
+                                    <div class="favorite-action add-cart-btn">Demander un devis</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Favori 4 -->
+                        <div class="favorite-item">
+                            <div class="favorite-image">
+                                <div class="placeholder-image">Image du carreau</div>
+                                <div class="favorite-remove">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="favorite-content">
+                                <h3 class="favorite-title">Carreau Ciment Décoré</h3>
+                                <div class="favorite-category">Effet Ciment • 20x20cm</div>
+                                <div class="favorite-actions">
+                                    <div class="favorite-action view-btn">Voir le produit</div>
+                                    <div class="favorite-action add-cart-btn">Demander un devis</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Favori 5 -->
+                        <div class="favorite-item">
+                            <div class="favorite-image">
+                                <div class="placeholder-image">Image du carreau</div>
+                                <div class="favorite-remove">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="favorite-content">
+                                <h3 class="favorite-title">Carreau Marbre Noir</h3>
+                                <div class="favorite-category">Effet Marbre • 60x120cm</div>
+                                <div class="favorite-actions">
+                                    <div class="favorite-action view-btn">Voir le produit</div>
+                                    <div class="favorite-action add-cart-btn">Demander un devis</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Favori 6 -->
+                        <div class="favorite-item">
+                            <div class="favorite-image">
+                                <div class="placeholder-image">Image du carreau</div>
+                                <div class="favorite-remove">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="favorite-content">
+                                <h3 class="favorite-title">Carreau Bois Noyer</h3>
+                                <div class="favorite-category">Effet Bois • 20x120cm</div>
+                                <div class="favorite-actions">
+                                    <div class="favorite-action view-btn">Voir le produit</div>
+                                    <div class="favorite-action add-cart-btn">Demander un devis</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Version non connectée -->
+                <div id="favorites-guest" style="display: none;">
+                    <div class="login-prompt">
+                        <h2>Connectez-vous pour gérer vos favoris</h2>
+                        <p>Créez un compte ou connectez-vous pour sauvegarder vos produits préférés et y accéder depuis n'importe quel appareil.</p>
+                        <a href="#" class="login-btn">Se connecter / S'inscrire</a>
+                    </div>
+                    
+                    <div class="favorites-empty">
+                        <i class="far fa-heart"></i>
+                        <h2>Votre liste de favoris est vide</h2>
+                        <p>Explorez notre catalogue et ajoutez des produits à vos favoris en cliquant sur l'icône cœur.</p>
+                        <a href="produits.html" class="btn">Découvrir nos produits</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Sté Rouaa Ceramic</h2>
+                    <p>Votre partenaire en carreaux céramiques de qualité</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3>Produits</h3>
+                        <ul>
+                            <li><a href="produits.html?effet=pierre">Effet Pierre</a></li>
+                            <li><a href="produits.html?effet=marbre">Effet Marbre</a></li>
+                            <li><a href="produits.html?effet=bois">Effet Bois</a></li>
+                            <li><a href="produits.html?effet=ciment">Effet Ciment</a></li>
+                            <li><a href="produits.html?effet=metal">Effet Métal</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>À propos</h3>
+                        <ul>
+                            <li><a href="apropos.html">Qui sommes-nous</a></li>
+                            <li><a href="points-de-vente.html">Points de vente</a></li>
+                            <li><a href="news.html">News</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h3>Suivez-nous</h3>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
+                            <a href="https://www.pinterest.com/" target="_blank"><i class="fab fa-pinterest"></i></a>
+                            <a href="https://www.linkedin.com/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Sté Rouaa Ceramic. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle between logged in and guest views (for demo purposes)
+            const toggleLoginStatus = document.querySelector('.login-btn');
+            const loggedInView = document.getElementById('favorites-logged-in');
+            const guestView = document.getElementById('favorites-guest');
+            
+            if (toggleLoginStatus) {
+                toggleLoginStatus.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    loggedInView.style.display = 'block';
+                    guestView.style.display = 'none';
+                });
+            }
+            
+            // Remove favorite item
+            const removeButtons = document.querySelectorAll('.favorite-remove');
+            
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const favoriteItem = this.closest('.favorite-item');
+                    const productName = favoriteItem.querySelector('.favorite-title').textContent;
+                    
+                    if (confirm(`Êtes-vous sûr de vouloir supprimer "${productName}" de vos favoris ?`)) {
+                        favoriteItem.remove();
+                        
+                        // Update favorites count
+                        const remainingItems = document.querySelectorAll('.favorite-item').length;
+                        document.querySelector('.favorites-count').textContent = `${remainingItems} produits favoris`;
+                        
+                        // Show empty state if no favorites left
+                        if (remainingItems === 0) {
+                            loggedInView.style.display = 'none';
+                            guestView.style.display = 'block';
+                            
+                            // Hide login prompt in guest view since user is already logged in
+                            const loginPrompt = guestView.querySelector('.login-prompt');
+                            if (loginPrompt) {
+                                loginPrompt.style.display = 'none';
+                            }
+                        }
+                    }
+                });
+            });
+            
+            // Clear all favorites
+            const clearButton = document.querySelector('.clear-btn');
+            
+            if (clearButton) {
+                clearButton.addEventListener('click', function() {
+                    if (confirm('Êtes-vous sûr de vouloir supprimer tous vos favoris ?')) {
+                        const favoriteItems = document.querySelectorAll('.favorite-item');
+                        
+                        favoriteItems.forEach(item => {
+                            item.remove();
+                        });
+                        
+                        // Show empty state
+                        loggedInView.style.display = 'none';
+                        guestView.style.display = 'block';
+                        
+                        // Hide login prompt in guest view since user is already logged in
+                        const loginPrompt = guestView.querySelector('.login-prompt');
+                        if (loginPrompt) {
+                            loginPrompt.style.display = 'none';
+                        }
+                    }
+                });
+            }
+            
+            // Share favorites list
+            const shareButton = document.querySelector('.share-btn');
+            
+            if (shareButton) {
+                shareButton.addEventListener('click', function() {
+                    alert('Dans une implémentation réelle, cette action ouvrirait des options de partage (email, réseaux sociaux, etc.).');
+                });
+            }
+            
+            // Product actions
+            const viewButtons = document.querySelectorAll('.view-btn');
+            const addCartButtons = document.querySelectorAll('.add-cart-btn');
+            
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productName = this.closest('.favorite-item').querySelector('.favorite-title').textContent;
+                    alert(`Dans une implémentation réelle, cette action vous redirigerait vers la page détaillée du produit "${productName}".`);
+                });
+            });
+            
+            addCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productName = this.closest('.favorite-item').querySelector('.favorite-title').textContent;
+                    alert(`Dans une implémentation réelle, cette action ajouterait "${productName}" à votre panier ou ouvrirait un formulaire de demande de devis.`);
+                });
+            });
+        });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
